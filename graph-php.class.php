@@ -1,8 +1,8 @@
 <?php
  /** graph-php.class.php
-  *  
+  *
   * Class for generate graphs
-  * 
+  *
   * @author Rafael Martin Soto
   * @author {@link https://www.inatica.com/ Inatica}
   * @blog {@link https://rafamartin10.blogspot.com/ Blog Rafael Martin Soto}
@@ -12,10 +12,10 @@
   *
   * */
 
- 
+
   require_once __DIR__ . '/img2img/img2img.class.php';
   require_once __DIR__ . '/ext-op-ml-php/ext-op-ml-php.class.php';
- 
+
  class graph
     {
     /**
@@ -27,14 +27,14 @@
      **/
     private $default_cfg = [
         'width'     => 6.4, // 6.4 inches
-        'height'    => 4.8, // 4.8 inches 
+        'height'    => 4.8, // 4.8 inches
         'dpi'       => 100, // 100 dpis
         'padding'   => .6, // 0.6 inches
         'fontdir'   => __DIR__.'/fonts',
         'fontfamilypath' => 'dejavu-fonts-ttf-2.37/ttf',
-        'font'      => 'DejaVuSans.ttf',    
-        'fontsize'  => 10.5,   
-        'xtickfontsize'  => 10.5,   
+        'font'      => 'DejaVuSans.ttf',
+        'fontsize'  => 10.5,
+        'xtickfontsize'  => 10.5,
         'ytickfontsize'  => 10.5,
         'axes'      => [ 'prop_cycle' => []
             ],
@@ -46,8 +46,8 @@
         'ylabel'    => '',
         'xlabel'    => '',
         'title'     => '',
-        'cycler'    => [ 
-            'color' => [ 
+        'cycler'    => [
+            'color' => [
                 'default' => ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
                 ],
             'linestyle'  => [ '-', '--', ':', '-.' ]
@@ -87,7 +87,7 @@
 		'width_marker_o'		=> 10,
 		'height_marker_o'		=> 10,
         'xticks'                => ['rotation' => 0]
-		
+
     ]; // /$default_cfg
 
 
@@ -105,8 +105,8 @@
      * Define markers
      */
     private $markers = ['.png', 'o', 'x', '^', 's', 'd'];
-	
-	
+
+
 
     /**
      * Define line & bar styles
@@ -126,7 +126,7 @@
      * Define math object for ext_op_ml class
      */
     public $math = null;
-		
+
 
 
     /**
@@ -172,8 +172,8 @@
     public function set_config( $cfg ){
         $this->cfg = $cfg;
     } // /set_config()
-	
-	
+
+
 
 
     /**
@@ -229,7 +229,7 @@
         // Change margin labels ticks automatically
         $this->cfg['xmarginlabelsticks'] = $this->cfg['height'] * 16 / 4.8;
         $this->cfg['ymarginlabelsticks'] = $this->cfg['width'] * 10 / 6.4;
-        
+
     } // /width()
 
 
@@ -263,7 +263,7 @@
     public function legendlabelheight( $legendlabelheight = 21 ){
         $this->cfg['legendlabelheight'] = $legendlabelheight;
     } // /legendlabelheight()
-    
+
 
 
     /**
@@ -295,10 +295,10 @@
     } // /height()
 
 
-    
+
     /**
      * ASSIGN values
-     * 
+     *
      * @param array $values
      */
     private function set_values( $values ){
@@ -395,11 +395,11 @@
         $this->cfg['axes']['prop_cycle'] = $this->cycler( 'color', 'default' ); // Assign a cycler to axes
     } // /init_defaults()
 
-    
+
 
     /**
      * GET cycler
-     * 
+     *
      * @param string $key
      * @return array $cycler
      */
@@ -410,11 +410,11 @@
         }
     } // /cycler()
 
-    
+
 
     /**
      * GET cycler Color
-     * 
+     *
      * @param string $colors
      * @return array $cycler
      */
@@ -447,13 +447,13 @@
 
     /**
      * GET colors array from abreviations
-     * 
+     *
      * @param string $colors_abrev
      * @return array $colors
      */
     private function get_colors_array_assoc($colors_abrev){
         $colors = [];
-        
+
         foreach( $colors_abrev as $color){
             $colors[] = $this->colors_rel[ $color ];
         }
@@ -467,7 +467,7 @@
 
     /**
      * axes takes a list of [xmin, xmax, ymin, ymax] and specifies the viewport of the axes.
-     * 
+     *
      * 1st Method: Set Max & Min with params [ 'xmin' => $xmin, 'xmax' => $xmax, 'ymin' => $ymin, 'ymax' => $ymax ]
      * 2nd Method: Set Max & Min with array [$xmin, $xmax, $ymin, $ymax]
      * @param array $arr_values_min_max
@@ -508,13 +508,13 @@
 
     /**
      * PLOT sub method to check if begin with 0
-     * 
+     *
      * @param array $cfg // ['y_begin_with_zero' => true] to draw y values begin with value 0
      * @return boolean $y_begin_with_zero
      */
     public function plot_y_begin_with_zero( $cfg = null ){
         $y_begin_with_zero = false;
-		
+
 		if( !is_null($cfg) ){
             if( isset($cfg['y_begin_with_zero']) && $cfg['y_begin_with_zero'] ){
                 $y_begin_with_zero = true;
@@ -528,25 +528,25 @@
 
     /**
      * PLOT sub method to get plot type
-     * 
+     *
      * @param array $cfg  // ['type' => '-' || '--' 'bar'
      * @return string $type
      */
     public function plot_type( $cfg = null ){
         $type = '-';
-		
+
 		if( !is_null($cfg) ){
             if( isset($cfg['type']) ){
                 if( strpos($cfg['type'], 'bar') !== false ){
                     $type = 'bar';
-                } else 
+                } else
                 if( strpos($cfg['type'], 'scatter') !== false ){
                     $type = 'scatter';
                 } else if( strpos($cfg['type'], '--') !== false ){
                     $type = '--';
                 } else if( strpos($cfg['type'], '-') !== false ){
                     $type = '-';
-                } 
+                }
             }
         }
 
@@ -557,16 +557,16 @@
 
     /**
      * PLOT sub method to get plot color
-     * 
+     *
      * @param array $cfg  // ['color' => ...
      * @return string $color
      */
     public function plot_next_color( $cfg = null ){
         $arr_color_cycler = $this->cycler( 'color' );
         $countval = count($this->cfg['values']);
-        
+
         $color_id = $countval % count($this->cycler( 'color', 'default' ));
-		
+
 		$color = $arr_color_cycler[ $color_id ];
 
         unset( $arr_color_cycler );
@@ -577,7 +577,7 @@
     } // /plot_next_color()
 
 
-    
+
     /**
      * RECALCULATES MAX & MIN of all values
      */
@@ -597,7 +597,7 @@
             if( $global_max_x < max( $values['values_x'] ) ){
                 $global_max_x = max( $values['values_x'] );
             }
-            
+
             if( $global_min_x > min( $values['values_x'] ) ){
                 $global_min_x = min( $values['values_x'] );
             }
@@ -640,7 +640,7 @@
 
     /**
      * PLOT. Add serie of values to graph
-     * 
+     *
      * @param array $arr_values
      * @param array $arr_values_y_param
      * @param array $cfg // ['type' => '-' || '--' || 'o' | 'x' || '^' || 's']
@@ -661,30 +661,30 @@
             unset( $value );
 		  return;
 		}
-		
+
         $y_begin_with_zero = $this->plot_y_begin_with_zero( $cfg );
         $type = $this->plot_type( $cfg );
         $color = $this->plot_next_color( $cfg );
         $values_are_keys = is_null($arr_values_y_param);
-		
+
 		$label = '';
 		if( !is_null( $cfg ) && isset($cfg['label']) ){
 			$label = $cfg['label'];
 		}
-		
+
 		$marker = $markerfilename = '';
 		if( !is_null( $cfg ) && isset($cfg['marker']) ){
 			$marker = strtolower( trim( $cfg['marker'] ) );
-			
+
 			if( strpos( $marker, '.png' ) !== false ){
 				$markerfilename = $marker;
 				$marker = '.png';
 			}
 		}
-		
+
 		if( !is_null( $cfg ) && !is_array( $cfg ) && is_string( $cfg ) ){
 			// Config param is string. Extract config parts
-			
+
 			// search for markers as 'o', 'x', '^', 's', 'd'
 			$cfg = strtolower( trim( $cfg ) );
 			foreach( $this->markers as $mark ){
@@ -693,7 +693,7 @@
 				}
 			}
             unset( $mark );
-			
+
 			// Search for colors
 			foreach( $this->colors_rel as $key => $col_rel ){
 				if( strpos( $cfg, $key ) !== false ){
@@ -703,7 +703,7 @@
 
             unset( $col_rel );
             unset( $key );
-			
+
 			// search for styles as '--', '-', 'bar'
 			// Needed in config str. If not given, will not drawed line
 			$type = '';
@@ -734,8 +734,8 @@
 		} else {
         	$arr_values_y = $arr_values_y_param;
 		}
-        
-        
+
+
         $max_x      = max( $arr_values_x );
         $max_y      = max( $arr_values_y );
         $min_x      = min( $arr_values_x );
@@ -773,7 +773,7 @@
 
     /**
      * BAR GRAPH PLOT. generate graph
-     * 
+     *
      * @param array $arr_values
      * @param array $arr_values_y_param
      * @param array $cfg // ['type' => '-' || '--' || 'o' || '^' || 's' || 'd']
@@ -792,14 +792,14 @@
 
     /**
      * SCATTER GRAPH PLOT. generate graph
-     * 
+     *
      * $arr_values have all series of values as:
      * [
      *  [ [x0, x1, x2, x3], [y0, y1, y2, y3], $cfg ], // first serie. $cfg can be null
      *  [ [x0, x1, x2, x3], [y0, y1, y2, y3], $cfg ] // second serie. $cfg can be null
      *  ..... // n series. $cfg can be null
      * ]
-     * 
+     *
      * @param array $arr_values
      * @param array $cfg // ['type' => '-' || '--' || 'o' || '^' || 's' || 'd']
      */
@@ -823,9 +823,9 @@
 
     /**
      * HISTOGRAM GRAPH PLOT. generate graph
-     * 
+     *
      * $cfg['num_blocks] = blocks to divide hist. Default = 10
-     * 
+     *
      * @param array $arr_values
      */
     public function hist( $arr_values, $cfg = null ){
@@ -835,19 +835,29 @@
 
         $num_blocks = (( isset($cfg['num_blocks']) )?$cfg['num_blocks']:10);
 
+        // set the histogram x-range
         $min = min($arr_values);
+        if( isset($cfg['xmin']) && $min > $cfg['xmin'])
+            $min = $cfg['xmin'];
         $max = max($arr_values);
+        if( isset($cfg['xmax']) && $max < $cfg['xmax'])
+            $max = $cfg['xmax'];
 
         $diff = $max - $min;
-
+        if( isset($cfg['binwidth'])) {
+            // if binwidth is assigned, recalculate $num_blocks;
+            $div = 1. / $cfg['binwidth'];
+            $num_blocks = (int)round( $diff * $div );
+        }
+        else {
+            $div = ( ( $num_blocks - 1 ) / $diff );
+        }
         $arr_hist = array_fill(0, $num_blocks, 0); // Fill count values to 0
-
-        $div = ( ( $num_blocks - 1 ) / $diff );
 
         foreach( $arr_values as $value){
             //    $diff           -> ( $num_blocks - 1 )
             //    ($value - $min) -> X
-            
+
             $block_index = (int)round( ($value - $min) * $div ); //$block_index = ( ($value - $min) * ( $num_blocks - 1 ) / $diff );
             ++$arr_hist[$block_index];
         }
@@ -856,7 +866,9 @@
 
         $this->plot( $this->math->linspace($min, $max, $num_blocks), $arr_hist, $cfg );
 
-        $this->axes([null, null, 0, max($arr_hist) ]);
+        // $this->axes([null, null, 0, max($arr_hist) ]);
+        // show the histogram range between $min and $max
+        $this->axes([$min, $max, 0, max($arr_hist) ]);
 
         unset( $arr_hist );
         unset( $min );
@@ -867,7 +879,7 @@
         unset( $div );
         unset( $block_index );
     } // /hist()
-    
+
 
 
     /**
@@ -946,10 +958,10 @@
     } // /set_labels_if_empty()
 
 
-    
-    /** 
+
+    /**
      * Draw the legend
-     * 
+     *
      * @param integer $left
      * @param integer $top
      * @param integer $key
@@ -962,7 +974,7 @@
 
            $left += $this->cfg['legendpaddingleft'] + $this->cfg['legendwidthlines'] + 12;
            $top += $this->cfg['legendpaddingtop'] + $labelheight * $key + ($labelheight/1.4);
-           
+
            imagettftext($this->gd,  $this->cfg['fontsize'], $angle, $left, $top, $text_color, $font_path, $this->cfg['values'][$key]['label'] );
 
            unset( $angle );
@@ -976,10 +988,10 @@
 
     /**
      * Show rectanle with round corners
-     * 
+     *
      * Draw a rectangle with rounded corners.
      * from https://gist.github.com/mistic100/9301c0eebaef047bfdc8
-     * 
+     *
      * @param integer $left
      * @param integer $top
      * @param integer $width
@@ -994,9 +1006,9 @@
         $y2 = ( $top + $height );
 
         $img = &$this->gd;
-        
+
         $r = min($r, floor(min(($x2-$x1)/2, ($y2-$y1)/2)));
-    
+
         // top border
         imageline($img, $x1+$r, $y1, $x2-$r, $y1, $color);
         // right border
@@ -1005,7 +1017,7 @@
         imageline($img, $x1+$r, $y2, $x2-$r, $y2, $color);
         // left border
         imageline($img, $x1, $y1+$r, $x1, $y2-$r, $color);
-        
+
         // top-left arc
         imagearc($img, $x1+$r, $y1+$r, $r*2, $r*2, 180, 270, $color);
         // top-right arc
@@ -1023,11 +1035,11 @@
         unset( $img );
     }// /generate_gd_legend_round_border()
 
-    
+
 
     /**
      * Show line Legend
-     * 
+     *
      * @param integer $left
      * @param integer $top
      * @param integer $key
@@ -1053,11 +1065,11 @@
         unset( $line_color );
     }// /generate_gd_legend_line()
 
-    
+
 
     /**
      * Show Graph
-     * 
+     *
      * @param array $cfg
      */
     public function show( $cfg = null ){
@@ -1068,7 +1080,7 @@
 
     /**
      * Draw to desired output
-     * 
+     *
      * @param array $cfg
      */
     public function draw_to_output( $cfg ){
@@ -1123,7 +1135,7 @@
 
     /**
      * ASSIGN X values
-     * 
+     *
      * @param array $x_values
      * @param boolean $values_are_keys
      */
@@ -1139,7 +1151,7 @@
         for($i=0;$i<$min_labels;$i++){
             $this->cfg['x_values'][] = (($values_are_keys)?($i*$step)+$min_value:$min_value+($i*$step_values));
         }
-		
+
 		$this->cfg['x_values'] = $this->arr_2_less_decimals( $this->cfg['x_values'] );
 
         unset( $min_labels );
@@ -1153,7 +1165,7 @@
 
     /**
      * Transform X values
-     * 
+     *
      * @param array $x_values
      * @param boolean $values_are_keys
      * @return array $x_values_return
@@ -1176,46 +1188,46 @@
         unset( $min_value );
         unset( $step );
         unset( $i );
-		
+
 		return $this->arr_2_less_decimals( $x_values_return );
     }
-	
+
 
 
     /**
      * return a png stream of graph base64
-     * 
+     *
      * @param array $cfg
      * @return string $png_stream
      */
 	public function output_gd_png_base64( $cfg = null){
-        
+
         $this->draw_to_output( $cfg );
 
 		return 'data:image/png;base64,' . base64_encode( $this->output_gd_png_raw( ) );
 	} // /output_gd_png_base64()
-	
-	
+
+
 
     /**
      * return a png stream of graph raw
-     * 
+     *
      * @return string $png_stream
      */
 	public function output_gd_png_raw( ){
 		$filename = '/tmp/graph-php.class.png.'.time().'.tmp';
-		
+
 		imagepng( $this->gd, $filename );
-		
+
 		$fp = fopen($filename, "rb");
 		$content = fread($fp, filesize($filename));
 		fclose($fp);
-		
+
 		unlink( $filename );
-        
+
         unset( $fp );
         unset( $filename );
-		
+
 		return $content;
 	} // /output_gd_png_raw()
 
@@ -1223,7 +1235,7 @@
 
     /**
      * TRANSFORM Y values
-     * 
+     *
      * @param array $y_values
      * @return array $y_values_return
      */
@@ -1243,7 +1255,7 @@
         unset( $min );
         unset( $num_ticks );
         unset( $step );
-		
+
 		return $this->arr_2_less_decimals( $y_values_return );
     } // /transform_y_values()
 
@@ -1251,7 +1263,7 @@
 
     /**
      * ASSIGN Y values
-     * 
+     *
      * @param array $y_values
      */
     private function set_y_values( $y_values ){
@@ -1264,7 +1276,7 @@
         for($i=0;$i<$num_ticks;$i++){
             $this->cfg['y_values'][] = $max - ($step * $i);
         }
-		
+
 		$this->cfg['y_values'] = $this->arr_2_less_decimals( $this->cfg['y_values'] );
 
         unset( $i );
@@ -1278,7 +1290,7 @@
 
     /**
      * REDUCE decimals in array values if needed for visualize better data values
-     * 
+     *
      * @param array $values
      * @return array $arr_values_less_decimals
      */
@@ -1286,7 +1298,7 @@
 		$max = max( $values );
 		$min = min( $values );
 		$arr_values_less_decimals = [];
-		
+
 		if( $max >=10 ){
 			if( ($max-$min) < 10 ){
 				$cut_decimals = 2;
@@ -1298,17 +1310,17 @@
         } else {
 			$cut_decimals = 2;
 		}
-		
+
 		// Search if there is one decimal at least
 		$there_are_decimals = false;
-		
+
 		foreach($values as $value){
 			if( is_float($value)){
 				$there_are_decimals = true;
 				break;
 			}
 		}
-		
+
 		if( $there_are_decimals ){
 			// Cut to X decimals
 			foreach($values as $value){
@@ -1323,7 +1335,7 @@
         unset( $cut_decimals );
         unset( $there_are_decimals );
         unset( $value );
-		
+
 	 	return $arr_values_less_decimals;
 	}// /arr_2_less_decimals()
 
@@ -1331,54 +1343,54 @@
 
     /**
      * Generate Graph Lines
-     * 
+     *
      * @param $id_serie
      */
     private function generate_gd_line_graph( $id_serie = 0 ){
-		
+
         $values = $this->cfg['values'][$id_serie];
 
 		// Maths axis X
 		$global_min_x = ( isset($this->cfg['global_force_min_x'])?$this->cfg['global_force_min_x']:$this->cfg['global_min_x']);
         $global_max_x = ( isset($this->cfg['global_force_max_x'])?$this->cfg['global_force_max_x']:$this->cfg['global_max_x']);
-		
+
         $arr_short_values_x = $this->long_2_short_arrays( $this->arr_2_less_decimals($values['values_x']) );
         $count_short_values_x = count( $arr_short_values_x );
         $pixels_available_x = $this->pixels_available_x();
-		if( isset($this->cfg['global_inside_margin_x_axis']) ){		
+		if( isset($this->cfg['global_inside_margin_x_axis']) ){
 		 	$pixels_available_x -= $this->cfg['global_inside_margin_x_axis'] * 2;
 		}
         $pixels_size_step_x   = $pixels_available_x / ($count_short_values_x - 1);
-		
+
 		// Maths axis Y
         $global_min_y = ( isset($this->cfg['global_force_min_y'])?$this->cfg['global_force_min_y']:$this->cfg['global_min_y']);
         $global_max_y = ( isset($this->cfg['global_force_max_y'])?$this->cfg['global_force_max_y']:$this->cfg['global_max_y']);
-		
+
         $arr_short_values_y = $this->long_2_short_arrays(  $this->arr_2_less_decimals([$global_min_y, $global_max_y ]) );
         $count_short_values_y = count( $arr_short_values_y );
         $pixels_available_y = $this->cfg['pix_height'] - $this->cfg['pix_paddingtop'] - 1 - $this->cfg['pix_paddinginsidetop'] - $this->cfg['pix_paddingbottom'] - 1 - $this->cfg['pix_paddinginsidebottom'];
-		
+
 		$line_color_rgb = $this->math->hex2rgb( $values['color'] );
         $line_color = imagecolorallocate( $this->gd, $line_color_rgb[0], $line_color_rgb[1], $line_color_rgb[2]);
-		
+
 		$style_dashed = Array(
-                $line_color, 
-                $line_color, 
-                $line_color, 
-                $line_color, 
-                IMG_COLOR_TRANSPARENT, 
-                IMG_COLOR_TRANSPARENT, 
-                IMG_COLOR_TRANSPARENT, 
+                $line_color,
+                $line_color,
+                $line_color,
+                $line_color,
+                IMG_COLOR_TRANSPARENT,
+                IMG_COLOR_TRANSPARENT,
+                IMG_COLOR_TRANSPARENT,
                 IMG_COLOR_TRANSPARENT
                 );
-				
+
 		imagesetstyle($this->gd, $style_dashed);
 
         $max_top    = $this->cfg['pix_paddingtop'] + 1 + $this->cfg['pix_paddinginsidetop'];
         $min_bottom = $this->cfg['pix_height'] - 1 - $this->cfg['pix_paddingbottom'] - 1 - $this->cfg['pix_paddinginsidebottom'];
         $left_begin = $this->cfg['pix_paddingleft'] + 1 + $this->cfg['pix_paddinginsideleft'];
-		
-		if( isset($this->cfg['global_inside_margin_x_axis']) ){		
+
+		if( isset($this->cfg['global_inside_margin_x_axis']) ){
 		 	$left_begin += $this->cfg['global_inside_margin_x_axis'];
 		}
 
@@ -1397,14 +1409,14 @@
 			}
             $left = (int)($left_begin + ($previous_value_x-$global_min_x) * $pixels_available_x / $diff_x);
             $top = (int)($min_bottom - ($previous_value_y-$global_min_y) * $pixels_available_y / $diff_y);
-			
+
             $right = (int)($left_begin + ($values['values_x'][$i]-$global_min_x) * $pixels_available_x / $diff_x);
             $bottom = (int)($min_bottom - ($values['values_y'][$i]-$global_min_y) * $pixels_available_y / $diff_y);
 
 			if( in_array($values['type'], [ '-', '--' ] ) ){
 				imagesetthickness($this->gd, 1);
 				imagefilledellipse ( $this->gd , $right, $bottom, $this->cfg['lines']['width'], $this->cfg['lines']['width'], $line_color); // Draw end of line rounded
-				
+
 				if( $values['type'] == '--' ){
 					$this->imagepatternedline($this->gd, $left, $top, $right, $bottom, $line_color, $this->cfg['lines']['width'], '1111110000');
 				} else {
@@ -1416,11 +1428,11 @@
             // marker
             $this->gd_marker(  $values['marker'], $left, $top, $line_color, $values['markerfilename'] );
         }
-		
+
 		// At the end we need to draw the marker at right bottom last line
 		// marker
-        $this->gd_marker( $values['marker'], $right, $bottom, $line_color, $values['markerfilename'] );		
-		
+        $this->gd_marker( $values['marker'], $right, $bottom, $line_color, $values['markerfilename'] );
+
 		imagesetthickness($this->gd, 1); // Set to default pixel width
 
         unset( $value );
@@ -1446,13 +1458,13 @@
         unset( $global_max_y );
         unset( $global_min_y );
         unset( $values );
-    } // /generate_gd_line_graph()    
+    } // /generate_gd_line_graph()
 
 
 
     /**
      * Draw Marker
-     * 
+     *
      * @param string $marker
      * @param string $left
      * @param string $top
@@ -1478,14 +1490,14 @@
                             break;
         }
     } // /gd_marker()
-	
-	
+
+
 
 	/**
 	* imagepatternedline() function
-	* 
+	*
 	* thanks to: https://www.php.net/manual/es/function.imagedashedline.php#99437
-	* 
+	*
 	*  Routine was developed to draw any kind of straight line with thickness. Routine uses imageline() function to draw line.
 	*  Parameters are (similar to imageline() function):
 	*    $image: (resource) imagefile
@@ -1512,7 +1524,7 @@
 	*  ."11000011111100111111000011001111001111000011110000"
 	*  ."1111001111110011000011000000001100110011"); // barcode
 	*/
-	
+
 	private function imagepatternedline($image, $xstart, $ystart, $xend, $yend, $color, $thickness=1, $pattern="11000011") {
 	   $pattern=(!strlen($pattern)) ? "1" : $pattern;
 	   $x=$xend-$xstart;
@@ -1601,14 +1613,14 @@
         $img = imagecreatefrompng($filename);
         $sx = imagesx($img);
         $sy = imagesy($img);
-        
+
         $half_width = ( $sx / 2 );
         $half_height = ( $sy / 2 );
-        
+
         imagesavealpha($this->gd, true);
-        
+
         imagecopy($this->gd, $img, $left - $half_width, $top - $half_height, 0, 0, $sx, $sy);
-        
+
         unset( $img );
         unset( $sx );
         unset( $sy );
@@ -1629,7 +1641,7 @@
         imagesetthickness( $this->gd, $this->cfg['lines']['width'] - 1 );
         $half_width = ( $this->cfg['width_marker_x'] / 2 );
         $half_height = ( $this->cfg['height_marker_x'] / 2 );
-        
+
         imageline($this->gd, $left - $half_width, $top - $half_width, $left + $half_width, $top + $half_width, $line_color );
         imageline($this->gd, $left - $half_width, $top + $half_width, $left + $half_width, $top - $half_width, $line_color );
 
@@ -1648,19 +1660,19 @@
     */
     private function gd_marker_triangle( $left, $top, $backgr_color ){
         imagesetthickness( $this->gd, $this->cfg['lines']['width'] - 1 );
-        
+
         $half_width = ( $this->cfg['width_marker_x'] / 2 );
         $half_height = ( $this->cfg['height_marker_x'] / 2 );
-        
+
         $coords = array(
                 $left,  $top - $half_height,  // Point 1 (x, y)
                 $left + $half_width,  $top + $half_height, // Point 2 (x, y)
                 $left - $half_width,  $top + $half_height,  // Point 3 (x, y)
                 $left,  $top - $half_height  // Point 4 (x, y)
                 );
-        
+
         imagefilledpolygon($this->gd, $coords, 4, $backgr_color);
-        
+
         unset( $half_width );
         unset( $half_height );
         unset( $coords );
@@ -1677,10 +1689,10 @@
     */
     private function gd_marker_diamond( $left, $top, $backgr_color ){
         imagesetthickness( $this->gd, $this->cfg['lines']['width'] - 1 );
-        
+
         $half_width = ( $this->cfg['width_marker_x'] / 2 );
         $half_height = ( $this->cfg['height_marker_x'] / 2 );
-        
+
         $coords = array(
                 $left - $half_width,  $top,  // Point 1 (x, y)
                 $left,  $top - $half_height - $half_height/2, // Point 2 (x, y)
@@ -1688,9 +1700,9 @@
                 $left,  $top + $half_height + $half_height/2, // Point 2 (x, y)
                 $left - $half_width,  $top,  // Point 1 (x, y)
                 );
-        
+
         imagefilledpolygon($this->gd, $coords, 5, $backgr_color);
-        
+
         unset( $half_width );
         unset( $half_height );
         unset( $coords );
@@ -1707,12 +1719,12 @@
     */
     private function gd_marker_rectangle( $left, $top, $backgr_color ){
         imagesetthickness( $this->gd, $this->cfg['lines']['width'] - 1 );
-        
+
         $half_width = ( $this->cfg['width_marker_x'] / 2 );
         $half_height = ( $this->cfg['height_marker_x'] / 2 );
-        
+
         imagefilledrectangle($this->gd, $left - $half_width, $top - $half_height, $left + $half_width, $top + $half_height, $backgr_color);
-        
+
         unset( $half_width );
         unset( $half_height );
     } // /gd_marker_rectangle()
@@ -1729,29 +1741,29 @@
     private function gd_marker_o( $left, $top, $bkgr_color ){
         imagefilledellipse ( $this->gd , $left, $top, $this->cfg['width_marker_o'], $this->cfg['height_marker_o'], $bkgr_color); // Draw ellipse
     } // /gd_marker_o()
-	
-	
-	
+
+
+
 	/**
      * get the PIXELS AVAILABLE in X AXIS of the zone to Draw
-     * 
+     *
      */
     private function pixels_available_x( ){
 		return $this->cfg['pix_width'] - $this->cfg['pix_paddingleft'] - 1 - $this->cfg['pix_paddinginsideleft'] - $this->cfg['pix_paddingright'] - 1 - $this->cfg['pix_paddinginsideright'];
 	}// /pixels_available_x()
-	
-	
-	
+
+
+
 	/**
      * get the PIXELS AVAILABLE in Y AXIS of the zone to Draw
-     * 
+     *
      */
     private function pixels_available_y( ){
 		return $this->cfg['pix_height'] - $this->cfg['pix_paddingtop'] - 1 - $this->cfg['pix_paddinginsidetop'] - $this->cfg['pix_paddingbottom'] - 1 - $this->cfg['pix_paddinginsidebottom'];
 	}// /pixels_available_y()
-	
-	
-	
+
+
+
 	/**
      * get the WIDTHS of the col Bar
 	 *
@@ -1763,26 +1775,26 @@
         $global_max_x 	= ( isset($this->cfg['global_force_max_x'])?$this->cfg['global_force_max_x']:$this->cfg['global_max_x']);
         $global_diff_x 	= $global_max_x - $global_min_x;
 		$diff_x			= $this->cfg['values'][$id_serie]['diff_x'];
-				
+
         $count_short_values_x 	= count( $this->cfg['values'][$id_serie]['values_x'] );// Take one sample of data
-        
+
 		// if we have 5 cols and will be drawed in 15 cols, need to do a change in $count_short_values_x
 		// Then do a rule of 3
 		// if  diff_x == count_short_values_x Then global_diff_x will be X
 		// Math operation will be:
 		// X = global_diff_x * diff_x  / count_short_values_x
 		$count_short_values_x 	= ( ($global_diff_x  ) * ($count_short_values_x-1) / ( $diff_x) )+1	;
-		
-		
+
+
         $pixels_available_x 	= $this->pixels_available_x();
         $pixels_size_step_x   	= $pixels_available_x / ($count_short_values_x - (1*$this->cfg['bars']['percmarginbetwbars'] / 100)  ); // Add last bar margin to end at full right bar
 		$margin_betw_bar_perc 	= $pixels_size_step_x * $this->cfg['bars']['percmarginbetwbars'] / 100; // margin between bars
-		
+
 		$barwidths = [];
 		$barwidths['total_width'] 	= $pixels_size_step_x;
 		$barwidths['margin_width'] 	= $margin_betw_bar_perc;
 		$barwidths['bar_width'] 	= ( $barwidths['total_width'] - $barwidths['margin_width'] );
-		
+
 		$this->cfg['global_inside_margin_x_axis'] = ( $barwidths['bar_width'] / 2 );
 
         unset( $global_min_x );
@@ -1793,20 +1805,20 @@
         unset( $pixels_available_x );
         unset( $pixels_size_step_x );
         unset( $margin_betw_bar_perc );
-		
+
 		return $barwidths;
 	}// /barwidths()
-	
+
 
 
     /**
      * Generate BAR Graph
-     * 
+     *
      */
     private function generate_gd_bar_graph( $id_serie = 0 ){
 		$values 	= $this->cfg['values'][$id_serie];
 		$barwidths 	= $this->barwidths( $id_serie ); // ['total_width', 'bar_width', 'margin_width' ]
-		
+
 		$line_color_rgb = $this->math->hex2rgb( $values['color'] );
         $line_color = imagecolorallocate( $this->gd, $line_color_rgb[0], $line_color_rgb[1], $line_color_rgb[2]);
 
@@ -1817,23 +1829,23 @@
         $global_max_y = ( isset($this->cfg['global_force_max_y'])?$this->cfg['global_force_max_y']:$this->cfg['global_max_y']);
 		$global_diff_y 	= $global_max_y - $global_min_y;
 		$global_diff_x 	= $global_max_x - $global_min_x;
-		
+
 		if( $global_diff_x == 0 ){
 			// Cannot divide by 0
 			$global_diff_x = 1;
 		}
-		
+
 		if( $global_diff_y == 0 ){
 			// Cannot divide by 0
 			$global_diff_y = 1;
 		}
-		
+
         $arr_short_values_x = $this->long_2_short_arrays( $this->arr_2_less_decimals($values['values_x']) );
         $count_short_values_x = count( $arr_short_values_x );
         $pixels_available_x = $this->pixels_available_x() - $this->cfg['global_inside_margin_x_axis'] * 2;
         $pixels_size_step_x   = $barwidths['total_width'];
 		$margin_betw_bar_perc = $barwidths['margin_width'];
-		
+
 		// Maths axis Y
         $arr_short_values_y = $this->long_2_short_arrays( $values['values_y'] );
         $count_short_values_y = count( $arr_short_values_y );
@@ -1847,11 +1859,11 @@
 			//$left = (int)($left_begin + $barwidths['total_width'] * ($values['values_x'][$i]-$global_min_x));
 			$left = (int)($left_begin + ($values['values_x'][$i] - $global_min_x) * $pixels_available_x / $global_diff_x) - $this->cfg['global_inside_margin_x_axis'];
             $top  = (int)($min_bottom - ($values['values_y'][$i] - $global_min_y) * $pixels_available_y / $global_diff_y);
-			
+
             $right = (int)($left + $barwidths['bar_width'] );
             $bottom = $min_bottom;
-			
-			
+
+
 			imagefilledrectangle( $this->gd, $left, $top, $right, $bottom, $line_color );
         }
 
@@ -1888,7 +1900,7 @@
 
     /**
      * merge background image
-     * 
+     *
      * */
     private function gd_backgr_img( ){
         // Load background image
@@ -1899,9 +1911,9 @@
             $width = $this->pixels_available_x( ) + $this->cfg['pix_paddinginsideleft'] + 1 + $this->cfg['pix_paddinginsideright'] - 2;
             $height = $this->pixels_available_y( ) + $this->cfg['pix_paddinginsidetop'] + 1 + $this->cfg['pix_paddinginsidetop'] - 2;
 
-            
+
             $this->bckgr_img_gd->resample( $width, $height, false );
-            
+
             imagecopy($this->gd, $this->bckgr_img_gd->gd(), $left, $top, 0, 0, $width, $height);
 
             unset( $left );
@@ -1915,7 +1927,7 @@
 
     /**
      * Create GD Work Space
-     * 
+     *
 	 * @param array $cfg
      * @param array $x_values
      */
@@ -1925,7 +1937,7 @@
         $this->set_cfg_inch_2_pixels( );
 
         $this->gd_blank_backgr( );
-        
+
         $this->gd_draw_inside_border( );
 
         $this->gd_backgr_img( );
@@ -1937,9 +1949,9 @@
                break;
             }
         }
-		
+
 		$this->gd_draw_axis_x( $cfg );
-        
+
         $this->gd_draw_axis_y( $cfg );
 
         $this->gd_drawtitle( );
@@ -1956,7 +1968,7 @@
 
     /**
      * Draw ylabel
-     * 
+     *
      * imagettfbbox():
      * 0	lower left corner, X position
      * 1	lower left corner, Y position
@@ -1997,7 +2009,7 @@
 
     /**
      * Draw xlabel
-     * 
+     *
      * imagettfbbox():
      * 0	lower left corner, X position
      * 1	lower left corner, Y position
@@ -2011,7 +2023,7 @@
     private function gd_draw_xlabel( ){
         if( $this->cfg['xlabel'] != '' ){
             $angle = 0;
-            
+
             $font_path = $this->cfg['fontdir']. '/' . $this->cfg['fontfamilypath']. '/' . $this->cfg['font'];
             $text_color = imagecolorallocate( $this->gd, 0, 0, 0); // Black
 
@@ -2040,7 +2052,7 @@
 
     /**
      * Draw TITLE
-     * 
+     *
      * imagettfbbox():
      * 0	lower left corner, X position
      * 1	lower left corner, Y position
@@ -2077,12 +2089,12 @@
             unset( $font_path );
         }
     } // /gd_drawtitle()
-    
-        
-   
+
+
+
     /**
      * Draw Axis X (ticks & values)
-     * 
+     *
 	 * @param array $cfg
      */
     private function gd_draw_axis_x( $cfg = null ){
@@ -2096,7 +2108,7 @@
 
     /**
      * Draw Axis Y (ticks & values)
-     * 
+     *
 	 * @param array $cfg
      */
     private function gd_draw_axis_y( $cfg = null ){
@@ -2110,16 +2122,16 @@
 
     /**
      * Draw Axis X Values
-     * 
+     *
 	 * @param array $cfg
      */
     private function gd_draw_values_x( $cfg = null ){
 		$centerlabels = ((isset($cfg['centerlabels']))?$cfg['centerlabels']:$this->cfg['centerlabels']); // Used for Bar graphs or Category bar graphs
-		
+
         $font_path = $this->cfg['fontdir']. '/' . $this->cfg['fontfamilypath']. '/' . $this->cfg['font'];
         $global_min_x = ( isset($this->cfg['global_force_min_x'])?$this->cfg['global_force_min_x']:$this->cfg['global_min_x']);
         $global_max_x = ( isset($this->cfg['global_force_max_x'])?$this->cfg['global_force_max_x']:$this->cfg['global_max_x']);
-		
+
         $arr_short_values = $this->long_2_short_arrays( $this->transform_x_values([$global_min_x, $global_max_x ]) );
         $count_short_values = count( $arr_short_values );
         $pixels_available = $this->cfg['pix_width'] - $this->cfg['pix_paddingleft'] - 1 - $this->cfg['pix_paddinginsideleft'] - $this->cfg['pix_paddingright'] - 1 - $this->cfg['pix_paddinginsideright'];
@@ -2191,14 +2203,14 @@
 
     /**
      * Draw Axis Y Values
-     * 
+     *
      */
     private function gd_draw_values_y( ){
         $font_path = $this->cfg['fontdir']. '/' . $this->cfg['fontfamilypath']. '/' . $this->cfg['font'];
-		
+
         $global_min_y = ( isset($this->cfg['global_force_min_y'])?$this->cfg['global_force_min_y']:$this->cfg['global_min_y']);
         $global_max_y = ( isset($this->cfg['global_force_max_y'])?$this->cfg['global_force_max_y']:$this->cfg['global_max_y']);
-		
+
         $arr_short_values = $this->long_2_short_arrays( $this->transform_x_values([$global_min_y, $global_max_y ]) );
         rsort( $arr_short_values );
         $count_short_values = count( $arr_short_values );
@@ -2235,23 +2247,23 @@
         unset( $i );
         unset( $left );
         unset( $angle );
-        unset( $font_path );  
-        unset( $global_min_y );  
-        unset( $global_max_y ); 
-        unset( $text_color );  
-        unset( $top_begin );   
-        unset( $right );      
-        unset( $font_measures ); 
-        unset( $width_font );     
-        unset( $height_font );    
-        unset( $top_center );        
+        unset( $font_path );
+        unset( $global_min_y );
+        unset( $global_max_y );
+        unset( $text_color );
+        unset( $top_begin );
+        unset( $right );
+        unset( $font_measures );
+        unset( $width_font );
+        unset( $height_font );
+        unset( $top_center );
     } // /gd_draw_values_y()
 
 
 
     /**
      * Draw Axis Xticks
-     * 
+     *
      */
     private function gd_draw_xticks( $cfg = null ){
 		$y_drawguidelines = ((isset($cfg['y_drawguidelines']))?$cfg['y_drawguidelines']:$this->cfg['y_drawguidelines']);
@@ -2259,7 +2271,7 @@
 
         $global_min_x = ( isset($this->cfg['global_force_min_x'])?$this->cfg['global_force_min_x']:$this->cfg['global_min_x']);
         $global_max_x = ( isset($this->cfg['global_force_max_x'])?$this->cfg['global_force_max_x']:$this->cfg['global_max_x']);
-		
+
         $arr_short_values = $this->long_2_short_arrays( $this->transform_x_values([$global_min_x, $global_max_x ]) );
         $count_short_values = count( $arr_short_values );
         $pixels_available = $this->cfg['pix_width'] - $this->cfg['pix_paddingleft'] - 1 - $this->cfg['pix_paddinginsideleft'] - $this->cfg['pix_paddingright'] - 1 - $this->cfg['pix_paddinginsideright'];
@@ -2294,7 +2306,7 @@
 			}
             $right = $left;
 
-            
+
             // Smooth
             imagerectangle( $this->gd, $left-1, $top, $left+1, $bottom, $outside_layer1);
             imagesetpixel($this->gd, $left-1, $bottom+1, $outside_layer3);
@@ -2304,7 +2316,7 @@
 
             imageline( $this->gd, $left, $top, $right, $bottom, $line_color );
             imagesetpixel($this->gd, $left, $bottom + 1, $pixel_gray);
-			
+
 			if( $y_drawguidelines ){
 				imageline( $this->gd, $left, $top-2, $left, $this->cfg['pix_paddingtop'] + 2, $guideline_color );
 			}
@@ -2336,17 +2348,17 @@
 
     /**
      * Draw Axis Yticks
-     * 
+     *
 	 * @param array $cfg
      */
     private function gd_draw_yticks( $cfg ){
 		$x_drawguidelines = ((isset($cfg['x_drawguidelines']))?$cfg['x_drawguidelines']:$this->cfg['x_drawguidelines']);
-		
+
         $global_min_y = ( isset($this->cfg['global_force_min_y'])?$this->cfg['global_force_min_y']:$this->cfg['global_min_y']);
         $global_max_y = ( isset($this->cfg['global_force_max_y'])?$this->cfg['global_force_max_y']:$this->cfg['global_max_y']);
-		
+
         $arr_short_values = $this->long_2_short_arrays( $this->transform_x_values([$global_min_y, $global_max_y ]) );
-        
+
         $count_short_values = count( $arr_short_values );
         $pixels_available = $this->cfg['pix_height'] - $this->cfg['pix_paddingtop'] - 1 - $this->cfg['pix_paddingbottom'] - 1 - $this->cfg['pix_paddinginsidetop'] - $this->cfg['pix_paddinginsidebottom'];
         $pixels_size_step   = $pixels_available / ($count_short_values - 1);
@@ -2376,7 +2388,7 @@
 
             imageline( $this->gd, $left, $top, $right, $bottom, $line_color );
             imagesetpixel($this->gd, $left-1, $top, $pixel_gray);
-			
+
 			if( $x_drawguidelines ){
 				imageline( $this->gd, $left+5, $top, $this->cfg['pix_width'] - $this->cfg['pix_paddingright'] - 2, $top, $guideline_color );
 			}
@@ -2408,7 +2420,7 @@
 
     /**
      * Draw inside graph border
-     * 
+     *
      */
     private function gd_draw_inside_border( ){
         $border_color   = imagecolorallocate( $this->gd, 0, 0, 0); // Black
@@ -2469,7 +2481,7 @@
 
     /**
      * free gd image
-     * 
+     *
      */
     private function free_gd( ){
         imagedestroy($this->gd);
@@ -2480,7 +2492,7 @@
 
     /**
      * Output GD graph in png
-     * 
+     *
      */
     private function output_gd_png( ){
         header("Content-type: image/png");
@@ -2491,7 +2503,7 @@
 
     /**
      * Converts a long values array to shortest values array
-     * 
+     *
      * @param array $long_array
      * @return array $short_array
      */
@@ -2503,7 +2515,7 @@
 
     /**
      * Set configuration values in pixels
-     * 
+     *
      */
     private function set_cfg_inch_2_pixels( ){
         $this->cfg['pix_width']                 = $this->math->inch_2_pixels( $this->cfg['width'],                  $this->cfg['dpi'] );
@@ -2522,13 +2534,13 @@
 
     /**
      * Generate Blank Background
-     * 
+     *
      */
     private function gd_blank_backgr( ){
         $this->gd = @imagecreatetruecolor( $this->cfg['pix_width'], $this->cfg['pix_height']  ) or die("Cannot Initialize new GD image stream");
 		imagesavealpha($this->gd, true);
 		imagefill($this->gd,0,0,0x7fff0000); // alpha Channel
-		
+
 		imageantialias($this->gd, true);
 
         $backgr_color_rgb = $this->math->hex2rgb( $this->cfg['backgroundcolor'] );
@@ -2544,15 +2556,15 @@
 
     /**
      * Compute Offset. Search middel & top values for axis
-     * 
+     *
      * $tableval will be array as:
      * [  'classes' => ['from' => 0, 'to' => 0],
      *    'avg'     => 0,
      *    'f'       => 0,
      *    'fr'      => 0,
-     *    'F'       => 0 
+     *    'F'       => 0
      * ]
-     * 
+     *
      * @param array $arrval
      * @param integer $accommodate_to_x_samples // Set to the number of ticks that you want. If not set, the system will do calcs itself
      * @return array $tableval
