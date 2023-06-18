@@ -152,7 +152,13 @@
 
 
     public function __construct( $cfg = null) {
-		$this->set_config( ( is_null($cfg) ) ? $this->default_cfg : $cfg );
+		// $this->set_config( ( is_null($cfg) ) ? $this->default_cfg : $cfg );
+		$this->set_config( $this->default_cfg );
+        if( !is_null($cfg) ) {  // if $cfg is not null, merge to default_cfg
+            foreach( $cfg as $key => $value) {
+                $this->cfg[$key] = $value;
+            }
+        }
         $this->init_defaults( );
         $this->math = new ext_op_ml( );
 	} // / __construct
